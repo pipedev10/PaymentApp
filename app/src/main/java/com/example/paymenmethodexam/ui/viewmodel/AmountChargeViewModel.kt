@@ -17,12 +17,13 @@ class AmountChargeViewModel @Inject constructor(
     private val amountChargeImp: AmountChargeImp
 ): ViewModel() {
 
-    private val _loginResponse: MutableLiveData<Event<Resource<List<PaymentMethod>>>> = MutableLiveData()
-    val loginResponse: LiveData<Event<Resource<List<PaymentMethod>>>>
+    private val _loginResponse: MutableLiveData<Resource<List<PaymentMethod>>> = MutableLiveData()
+    val loginResponse: LiveData<Resource<List<PaymentMethod>>>
         get() = _loginResponse
 
     fun getPaymentMethod() = viewModelScope.launch {
 
-        _loginResponse.value = Event(amountChargeImp.getPaymentMethod())
+        _loginResponse.value = Resource.Loading
+        _loginResponse.value = amountChargeImp.getPaymentMethod()
     }
 }

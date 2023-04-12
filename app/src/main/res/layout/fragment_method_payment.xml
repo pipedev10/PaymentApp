@@ -8,6 +8,17 @@
     tools:context=".ui.view.payment.MethodPaymentFragment"
     android:padding="@dimen/common_padding_min">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="?android:progress" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/creditCard"
         android:layout_width="match_parent"
