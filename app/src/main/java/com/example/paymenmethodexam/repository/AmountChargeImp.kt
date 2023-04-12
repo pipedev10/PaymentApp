@@ -11,4 +11,12 @@ class AmountChargeImp @Inject constructor(
     suspend fun getPaymentMethod() = safeApiCall {
         paymentService.paymentMethod("444a9ef5-8a6b-429f-abdf-587639155d88")
     }
+
+    suspend fun getBankCards(paymentMethodId: String) = safeApiCall {
+        paymentService.getBank("444a9ef5-8a6b-429f-abdf-587639155d88", paymentMethodId)
+    }
+
+    suspend fun getInstallments(amount: Int, paymentMethodId: String, idBank: String) = safeApiCall {
+        paymentService.getInstallments("444a9ef5-8a6b-429f-abdf-587639155d88", amount, paymentMethodId, idBank)
+    }
 }
