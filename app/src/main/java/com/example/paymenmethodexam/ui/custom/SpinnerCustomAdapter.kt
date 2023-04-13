@@ -15,6 +15,7 @@ import com.example.paymenmethodexam.model.PayerCosts
 import com.example.paymenmethodexam.model.PaymentMethod
 import com.example.paymenmethodexam.utils.load
 import com.example.paymenmethodexam.utils.loadGif
+import com.example.paymenmethodexam.utils.loadUrl
 
 class SpinnerCustomAdapter (
     private val context: Context,
@@ -32,7 +33,7 @@ class SpinnerCustomAdapter (
         val imageName = view.findViewById<ImageView>(R.id.itemImage)
 
         itemName.text = contentSpinner[position].name
-        Glide.with(context).load(contentSpinner[position].thumbnail).into(imageName)
+        imageName.loadUrl(contentSpinner[position].thumbnail)
         return view
     }
 }
@@ -53,11 +54,7 @@ class SpinnerBankAdapter (
         val imageName = view.findViewById<ImageView>(R.id.itemImage)
 
         itemName.text = contentSpinner[position].name
-        if (contentSpinner[position].thumbnail.contains(".gif")) {
-            imageName.loadGif(contentSpinner[position].thumbnail)
-        } else {
-            imageName.load(contentSpinner[position].thumbnail)
-        }
+        imageName.loadUrl(contentSpinner[position].thumbnail)
         return view
     }
 }
@@ -78,11 +75,6 @@ class SpinnerCustomCreditAdapter (
         val imageName = view.findViewById<ImageView>(R.id.itemImage)
 
         itemName.text = contentSpinner[position].recommendedMessage
-        /*if (contentSpinner[position].thumbnail.contains(".gif")) {
-            imageName.loadGif(contentSpinner[position].thumbnail)
-        } else {
-            imageName.load(contentSpinner[position].thumbnail)
-        }*/
         return view
     }
 }

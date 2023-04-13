@@ -30,7 +30,6 @@ class AmountChargeViewModel @Inject constructor(
     val installmentsResponse: LiveData<Resource<List<Installments>>>
         get() = _installmentsResponse
 
-
     fun getPaymentMethod() = viewModelScope.launch {
         _paymentMethodResponse.value = Resource.Loading
         _paymentMethodResponse.value = amountChargeImp.getPaymentMethod()
