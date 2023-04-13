@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.paymenmethodexam.databinding.FragmentAmountChargeBinding
 import androidx.navigation.fragment.findNavController
 import com.example.paymenmethodexam.R
+import com.example.paymenmethodexam.utils.Constants.AMOUNT_TO_CHARGE
 
 class AmountChargeFragment : Fragment() {
 
@@ -15,7 +16,6 @@ class AmountChargeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -30,8 +30,9 @@ class AmountChargeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         _binding.btnGoToCharge.setOnClickListener {
-            findNavController().navigate(R.id.action_amountChargeFragment_to_methodPaymentFragment, null)
+            val bundle = Bundle()
+            bundle.putInt(AMOUNT_TO_CHARGE, _binding.etPrice.text.toString().toInt())
+            findNavController().navigate(R.id.action_amountChargeFragment_to_methodPaymentFragment, bundle)
         }
-        // findNavController().navigate(R.id.action_loginFragment_to_termAndCondFragment, null)
     }
 }

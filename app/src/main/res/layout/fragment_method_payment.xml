@@ -58,36 +58,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textSize="32sp"
-                    tools:text="****" />
+                    android:textSize="26sp"
+                    android:text="****" />
 
                 <TextView
                     android:id="@+id/tvSecondNumbers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textSize="32sp"
-                    tools:text="****"
-                    android:layout_marginStart="28dp"/>
+                    android:textSize="26sp"
+                    android:text="****"
+                    android:layout_marginStart="20dp"/>
 
                 <TextView
                     android:id="@+id/tvThirdNumbers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textSize="32sp"
-                    tools:text="****"
-                    android:layout_marginStart="28dp" />
+                    android:textSize="26sp"
+                    android:text="****"
+                    android:layout_marginStart="20dp" />
 
                 <TextView
                     android:id="@+id/tvFourthNumbers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textSize="24sp"
-                    android:layout_gravity="end"
-                    tools:text="8014"
-                    android:layout_marginStart="28dp"/>
+                    android:textSize="26sp"
+                    android:text="8014"
+                    android:layout_marginStart="20dp"/>
 
             </LinearLayout>
 
@@ -105,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_padding_min"
-                android:text="LUIS FELIPE CARRASCO"
+                tools:text="LUIS FELIPE CARRASCO"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvLabelNamePerson" />
 
@@ -157,9 +156,10 @@
         android:id="@+id/tilDateExpire"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_name"
+        android:hint="Número Tarjeta"
         android:layout_marginTop="@dimen/common_padding_min"
         app:helperText="@string/helper_required"
+        android:visibility="gone"
         app:endIconMode="clear_text"
         app:counterMaxLength="@integer/counter_max_name"
         app:counterEnabled="true"
@@ -172,7 +172,7 @@
             android:id="@+id/etDateExpire"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="@integer/counter_max_name"
+            android:maxLength="@integer/counter_max_number_card"
             android:inputType="textCapWords"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -209,5 +209,15 @@
         app:layout_constraintTop_toBottomOf="@+id/dropdownCardIssues"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFinish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Realizar Pago"
+        android:enabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@ interface PaymentService {
         @Query("public_key") publicKey: String,
         @Query("payment_method_id") paymentMethodId: String
     ): List<BankCard>
+
     @GET("payment_methods/installments")
     suspend fun getInstallments(
         @Query("public_key") publicKey: String,
