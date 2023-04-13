@@ -8,10 +8,18 @@
     <string name="description_img_photo">imagen del producto</string>
     <string name="description_spinner">No se encontró datos</string>
     <string name="title_payment">Realizar pago</string>
+    <string name="title_confirmation">Cobro confirmado</string>
     <string name="name_product">Zapatilla Vans Hombre</string>
     <string name="subtitle_method_payment">Mediante tarjeta de crédito</string>
+    <string name="error_form_incomplete">Favor completar formulario</string>
 
     <string name="hint_name">Nombre titular</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm_payment">Realizar Pago</string>
+    <string name="go_back">Volver</string>
+    <string name="name_bank">Banco</string>
+    <string name="name_payment_method">Medio de pago</string>
+    <string name="name_installments">Cuotas</string>
+    <string name="name_amount">Monto</string>
 </resources>

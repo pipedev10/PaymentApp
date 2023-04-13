@@ -19,6 +19,22 @@
         android:id="@+id/methodPaymentFragment"
         android:name="com.example.paymenmethodexam.ui.view.payment.MethodPaymentFragment"
         android:label="fragment_method_payment"
-        tools:layout="@layout/fragment_method_payment" />
+        tools:layout="@layout/fragment_method_payment" >
+        <action
+            android:id="@+id/action_methodPaymentFragment_to_confirmationFragment"
+            app:destination="@id/confirmationFragment" />
+        <action
+            android:id="@+id/action_methodPaymentFragment_to_amountChargeFragment"
+            app:destination="@id/amountChargeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmationFragment"
+        android:name="com.example.paymenmethodexam.ui.view.payment.ConfirmationFragment"
+        android:label="fragment_confirmation"
+        tools:layout="@layout/fragment_confirmation" >
+        <action
+            android:id="@+id/action_confirmationFragment_to_amountChargeFragment"
+            app:destination="@id/amountChargeFragment" />
+    </fragment>
 
 </navigation>
