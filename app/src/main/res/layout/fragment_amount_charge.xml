@@ -58,6 +58,7 @@
             android:id="@+id/etPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="@integer/counter_max_amount"
             android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>

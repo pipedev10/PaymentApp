@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:paddingHorizontal="@dimen/common_padding_min"
+    tools:context=".ui.view.payment.ConfirmationFragment">
+
+    <TextView
+        android:id="@+id/tvTitleConfirmation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_padding_min"
+        android:textColor="@color/white"
+        android:textAppearance="?attr/textAppearanceHeadline4"
+        android:maxLines="5"
+        android:ellipsize="end"
+        android:padding="@dimen/common_padding_min"
+        android:text="@string/title_confirmation"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/creditCard"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/common_padding_default"
+        android:layout_marginHorizontal="@dimen/common_padding_min"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleConfirmation" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:paddingHorizontal="@dimen/common_padding_default">
+
+
+            <TextView
+                android:id="@+id/tvLabelPaymentMethod"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold"
+                android:layout_marginTop="@dimen/common_padding_middle"
+                android:text="@string/name_payment_method"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvPaymentMethod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Master Card"
+                android:layout_marginStart="@dimen/common_padding_min"
+                app:layout_constraintTop_toTopOf="@+id/tvLabelPaymentMethod"
+                app:layout_constraintStart_toEndOf="@+id/tvLabelPaymentMethod" />
+
+            <TextView
+                android:id="@+id/tvLabelNameBank"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold"
+                android:text="@string/name_bank"
+                android:layout_marginTop="@dimen/common_padding_min"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelPaymentMethod"
+                app:layout_constraintStart_toStartOf="@+id/tvLabelPaymentMethod" />
+
+            <TextView
+                android:id="@+id/tvNameBank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="08/21"
+                android:layout_marginStart="@dimen/common_padding_min"
+                app:layout_constraintTop_toTopOf="@+id/tvLabelNameBank"
+                app:layout_constraintStart_toEndOf="@+id/tvLabelNameBank" />
+
+            <TextView
+                android:id="@+id/tvLabelInstallments"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold"
+                android:text="@string/name_installments"
+                android:layout_marginTop="@dimen/common_padding_min"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelNameBank"
+                app:layout_constraintStart_toStartOf="@+id/tvLabelNameBank" />
+
+            <TextView
+                android:id="@+id/tvInstallments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="08/21"
+                android:layout_marginStart="@dimen/common_padding_min"
+                android:maxLines="2"
+                app:layout_constraintTop_toTopOf="@+id/tvLabelInstallments"
+                app:layout_constraintStart_toEndOf="@+id/tvLabelInstallments" />
+
+            <TextView
+                android:id="@+id/tvLabelAmount"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textStyle="normal|bold"
+                android:text="@string/name_amount"
+                android:layout_marginTop="@dimen/common_padding_min"
+                app:layout_constraintTop_toBottomOf="@+id/tvLabelInstallments"
+                app:layout_constraintStart_toStartOf="@+id/tvLabelInstallments" />
+
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="08/21"
+                android:layout_marginStart="@dimen/common_padding_min"
+                app:layout_constraintTop_toTopOf="@+id/tvLabelAmount"
+                app:layout_constraintStart_toEndOf="@+id/tvLabelAmount" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGoToHomeScreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:text="Volver al inicio"
+        android:layout_marginBottom="@dimen/common_padding_default"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

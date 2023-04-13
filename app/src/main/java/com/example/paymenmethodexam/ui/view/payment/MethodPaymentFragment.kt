@@ -3,18 +3,20 @@ package com.example.paymenmethodexam.ui.view.payment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.paymenmethodexam.R
 import com.example.paymenmethodexam.data.network.Resource
 import com.example.paymenmethodexam.databinding.FragmentMethodPaymentBinding
 import com.example.paymenmethodexam.model.BankCard
+import com.example.paymenmethodexam.model.ConfirmationPayment
 import com.example.paymenmethodexam.model.Installments
 import com.example.paymenmethodexam.model.PaymentMethod
 import com.example.paymenmethodexam.ui.custom.SpinnerBankAdapter
@@ -22,8 +24,14 @@ import com.example.paymenmethodexam.ui.custom.SpinnerCustomAdapter
 import com.example.paymenmethodexam.ui.custom.SpinnerCustomCreditAdapter
 import com.example.paymenmethodexam.ui.viewmodel.AmountChargeViewModel
 import com.example.paymenmethodexam.utils.Constants.AMOUNT_TO_CHARGE
+import com.example.paymenmethodexam.utils.Constants.DATA_CHARGED
+import com.example.paymenmethodexam.utils.Constants.MESSAGE_ERROR_SERVICE
+import com.example.paymenmethodexam.utils.Constants.TAG_ERROR
 import com.example.paymenmethodexam.utils.loadUrl
 import com.example.paymenmethodexam.utils.snackBar
+import com.example.paymenmethodexam.utils.toUpperCase
+import com.example.paymenmethodexam.utils.validateFields
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,6 +43,11 @@ class MethodPaymentFragment : Fragment() {
     private var amount = 0
     private lateinit var paymentMethodId: String
     private lateinit var idBank: String
+    private lateinit var namePaymentMethod: String
+    private lateinit var nameBank: String
+    private lateinit var installment: String
+    private var isValidForm = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,15 +67,7 @@ class MethodPaymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding.etName.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun onTextChanged(value: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                _binding.tvNamePerson.text = value.toString().uppercase()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {}
-        })
 
         /*_binding.etDateExpire.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(value: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -88,94 +93,120 @@ class MethodPaymentFragment : Fragment() {
             }
 
         })*/
-        _binding.etDateExpire.setOnFocusChangeListener { _, hasFocus ->
-            val numberCard = _binding.etDateExpire.text.toString()
-            if (!hasFocus) {
-                with(numberCard) {
-                    val num = this.length / 16
-                    println(num)
-                    if (this.length in 1..4) {
-                        _binding.tvFirstNumbers.text = this.substring(0, this.length)
-                    } else if (this.length in 5..8) {
-                        _binding.tvSecondNumbers.text = this.substring(4, this.length)
-                    } else if (this.length in 9..12) {
-                        _binding.tvThirdNumbers.text = this.substring(8, this.length)
-                    } else if (this.length in 13..16) {
-                        _binding.tvFourthNumbers.text = this.substring(12, this.length)
-                    }
-                }
 
-            }
-        }
-        viewModel.paymentMethodResponse.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                when (it) {
-                    is Resource.Loading -> {
-                        showLoading()
-                    }
-                    is Resource.Success -> {
-                        hideLoading()
-                        fillSpinnerPaymentMethod(it.value)
-                    }
-                    is Resource.Failure -> {
-                        hideLoading()
-                        if (null != it.errorBody) {
-                            println(it.errorBody)
-                        } else {
-                            println(it.toString())
-                        }
-                    }
-                }
-            }
-        }
+        setupTextField()
+        setupObservers()
+        setupButtons()
+    }
 
-        viewModel.bankCard.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                when (it) {
-                    is Resource.Loading -> {
-                        showLoading()
-                    }
-                    is Resource.Success -> {
-                        hideLoading()
-                        fillSpinnerBankCard(it.value)
-                    }
-                    is Resource.Failure -> {
-                        hideLoading()
-                        if (null != it.errorBody) {
-                            println(it.errorBody)
-                        } else {
-                            println(it.toString())
-                        }
-                    }
-                }
-            }
-        }
+    private fun setupButtons() {
+        with(_binding){
+            btnFinish.setOnClickListener {
+                val bundle = Bundle()
+                if (!validateFields(tilName)) return@setOnClickListener
+                if (!isValidForm) requireView().snackBar(getString(R.string.error_form_incomplete))
 
-        viewModel.installmentsResponse.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                when (it) {
-                    is Resource.Loading -> {
-                        showLoading()
-                    }
-                    is Resource.Success -> {
-                        hideLoading()
-                        println(it.value)
-                        fillSpinnerInstallments(it.value)
-                    }
-                    is Resource.Failure -> {
-                        hideLoading()
-                        if (null != it.errorBody) {
-                            println(it.errorBody)
-                            requireView().snackBar(it.errorBody.toString())
-                        } else {
-                            println(it.toString())
-                        }
-                    }
-                }
+                val confirmationData = ConfirmationPayment(amount, namePaymentMethod, nameBank, installment, tvNamePerson.text.toString())
+                bundle.putString(DATA_CHARGED, Gson().toJson(confirmationData))
+                findNavController().navigate(R.id.action_methodPaymentFragment_to_confirmationFragment, bundle)
+            }
+            btnBack.setOnClickListener {
+                findNavController().navigate(R.id.action_methodPaymentFragment_to_amountChargeFragment, null)
             }
         }
     }
 
+    private fun setupTextField() {
+        with(_binding) {
+            etName.toUpperCase(true)
+            etName.addTextChangedListener(object: TextWatcher {
+                override fun beforeTextChanged(value: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                override fun onTextChanged(value: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    tvNamePerson.text = value.toString().uppercase()
+                }
+
+                override fun afterTextChanged(p0: Editable?) {}
+            })
+        }
+    }
+
+    private fun setupObservers() {
+        with(viewModel) {
+            paymentMethodResponse.observe(viewLifecycleOwner) {
+                lifecycleScope.launch {
+                    when (it) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
+                        is Resource.Success -> {
+                            hideLoading()
+                            fillSpinnerPaymentMethod(it.value)
+                        }
+                        is Resource.Failure -> {
+                            hideLoading()
+                            isValidForm = false
+                            it.errorBody?.let { responseError ->
+                                Log.e(TAG_ERROR, responseError.toString())
+                                requireView().snackBar(responseError.toString())
+                            } ?: run {
+                                requireView().snackBar(MESSAGE_ERROR_SERVICE)
+                            }
+                        }
+                    }
+                }
+            }
+
+            bankCard.observe(viewLifecycleOwner) {
+                lifecycleScope.launch {
+                    when (it) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
+                        is Resource.Success -> {
+                            hideLoading()
+                            fillSpinnerBankCard(it.value)
+                        }
+                        is Resource.Failure -> {
+                            hideLoading()
+                            isValidForm = false
+                            it.errorBody?.let { responseError ->
+                                Log.e(TAG_ERROR, responseError.toString())
+                                requireView().snackBar(responseError.toString())
+                            } ?: run {
+                                requireView().snackBar(MESSAGE_ERROR_SERVICE)
+                            }
+                        }
+                    }
+                }
+            }
+
+            installmentsResponse.observe(viewLifecycleOwner) {
+                lifecycleScope.launch {
+                    when (it) {
+                        is Resource.Loading -> {
+                            showLoading()
+                        }
+                        is Resource.Success -> {
+                            hideLoading()
+                            fillSpinnerInstallments(it.value)
+                        }
+                        is Resource.Failure -> {
+                            hideLoading()
+                            isValidForm = false
+                            it.errorBody?.let { responseError ->
+                                Log.e(TAG_ERROR, responseError.toString())
+                                requireView().snackBar(responseError.toString())
+                            } ?: run {
+                                requireView().snackBar(MESSAGE_ERROR_SERVICE)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
     private fun showLoading() {
         _binding.progressBar.visibility = View.VISIBLE
     }
@@ -188,6 +219,7 @@ class MethodPaymentFragment : Fragment() {
         _binding.dropdownPaymentMethod.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 paymentMethodId = paymentMethodList[position].id
+                namePaymentMethod = paymentMethodList[position].name
                 loadImagePayment(paymentMethodList[position].thumbnail)
                 viewModel.getBankCard(paymentMethodId)
             }
@@ -202,6 +234,7 @@ class MethodPaymentFragment : Fragment() {
         _binding.dropdownCardIssues.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
                 idBank = bankCardList[position].id
+                nameBank = bankCardList[position].name
                 viewModel.getInstallments(amount, paymentMethodId, idBank)
             }
 
@@ -215,11 +248,11 @@ class MethodPaymentFragment : Fragment() {
             _binding.dropdownInstallments.adapter = adapter
             _binding.dropdownInstallments.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                    installment = installmentList[0].payerCosts[position].recommendedMessage
                     _binding.btnFinish.isEnabled = true
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
-
             }
         }else {
             requireView().snackBar("No se logró obtener cuotas")
