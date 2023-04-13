@@ -40,6 +40,7 @@ class ConfirmationFragment : Fragment() {
             _binding.tvPaymentMethod.text = paymentMethod
             _binding.tvNameBank.text = bank
             _binding.tvInstallments.text = installment
+            _binding.tvNamePerson.text= nameUser
         }
 
         _binding.btnGoToHomeScreen.setOnClickListener {

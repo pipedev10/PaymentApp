@@ -22,4 +22,5 @@
     <string name="name_payment_method">Medio de pago</string>
     <string name="name_installments">Cuotas</string>
     <string name="name_amount">Monto</string>
+    <string name="go_home">Volver al inicio</string>
 </resources>
